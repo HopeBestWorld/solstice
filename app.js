@@ -5,6 +5,7 @@ const LEVELS = [
         solution: "TURING",
         dayRotorKey: 3,
         nightRotorKey: 7,
+        hint: "The alignment frequency requires Rotor I to equal 3. Calibrate Rotor II to 7.",
         clue: "Level 1 Milestone: The Father of Modern Computing & June Pride icon."
     },
     {
@@ -12,6 +13,7 @@ const LEVELS = [
         solution: "SOLSTICE",
         dayRotorKey: 5,
         nightRotorKey: 2,
+        hint: "Balance the solar cycles. Set Rotor I to 5, and match Rotor II to 2.",
         clue: "Level 2 Milestone: Shifting balancing point of June 21st."
     },
     {
@@ -19,6 +21,7 @@ const LEVELS = [
         solution: "JUNETEENTH",
         dayRotorKey: 6,
         nightRotorKey: 1,
+        hint: "The final frequency coordinates toward liberation. Set Rotor I to 6 and Rotor II to 1.",
         clue: "Level 3 Milestone: Honoring historical freedom, resilience, and Black joy."
     }
 ];
@@ -39,13 +42,12 @@ async function initGame() {
         videoElement.srcObject = stream;
         aiStatus.innerText = "TensorFlow Engine Active";
 
-        // Wait for video metadata to load before processing tensors
         videoElement.onloadedmetadata = () => {
             setInterval(processWebcamTensor, 200); // 5 frames per second edge processing
         };
     } catch (err) {
-        aiStatus.innerText = "Webcam Required for AI Mode";
-        console.error("Camera access denied: ", err);
+        aiStatus.innerText = "Webcam Blocked / Simulation Mode Active";
+        console.warn("Camera access unavailable: ", err);
     }
 
     loadLevel();
@@ -53,20 +55,16 @@ async function initGame() {
 
 // 100% Free Client-Side Google TensorFlow Tensor Analysis Engine
 function processWebcamTensor() {
-    if (!videoElement.videoWidth) return;
+    if (!videoElement || !videoElement.videoWidth) return;
 
     tf.tidy(() => {
-        // Convert video frames into pixel tensors safely on browser GPU/CPU
         const webcamTensor = tf.browser.fromPixels(videoElement);
-
-        // Isolate frame brightness using classic grayscale math: Mean of RGB matrices
         const meanTensor = tf.mean(webcamTensor);
         const data = meanTensor.dataSync();
         const brightnessValue = data[0];
 
         lightMetric.innerText = brightnessValue.toFixed(2);
 
-        // Thresholding state machine driven natively via tensor mathematical evaluation
         if (brightnessValue > 110) {
             isDayMode = true;
             overlay.innerText = "SOLSTICE DAY";
@@ -82,10 +80,19 @@ function processWebcamTensor() {
 function loadLevel() {
     const level = LEVELS[currentLevel];
     document.getElementById('encrypted-text').innerText = level.encrypted;
+    document.getElementById('current-hint').innerText = level.hint;
     document.getElementById('output-panel').classList.add('hidden');
     document.getElementById('victory-card').classList.add('hidden');
     document.getElementById('rotor-day').value = 0;
     document.getElementById('rotor-night').value = 0;
+
+    // Change the button text based on whether it's the final level or a progression
+    const nextBtn = document.getElementById('next-level-btn');
+    if (currentLevel === LEVELS.length - 1) {
+        nextBtn.innerText = "🔄 Play Again / Restart Matrix";
+    } else {
+        nextBtn.innerText = "Load Next Transmission ➡️";
+    }
 }
 
 // Turing Decryption Algorithm
@@ -98,7 +105,7 @@ document.getElementById('decrypt-btn').addEventListener('click', () => {
 
     outputPanel.classList.remove('hidden');
 
-    // Turing Machine Simulation Constraint: Rotor adjustments must be completed matching the environmental state
+    // Turing Machine Environmental Mode Constraints
     if (isDayMode && userDayRotor !== level.dayRotorKey) {
         decryptedMessage.innerHTML = "❌ <strong>DECRYPTION FAILED:</strong> Rotor I configuration mismatch for the active Solstice Day frequency.";
         return;
@@ -108,7 +115,6 @@ document.getElementById('decrypt-btn').addEventListener('click', () => {
         return;
     }
 
-    // Output success state if the combination matches the real-time AI states
     if (userDayRotor === level.dayRotorKey && userNightRotor === level.nightRotorKey) {
         decryptedMessage.innerHTML = `🔓 <strong>SUCCESS:</strong> "${level.solution}"<br><br><em>${level.clue}</em>`;
         document.getElementById('victory-card').classList.remove('hidden');
@@ -117,8 +123,14 @@ document.getElementById('decrypt-btn').addEventListener('click', () => {
     }
 });
 
+// Progression & Reset Handler
 document.getElementById('next-level-btn').addEventListener('click', () => {
-    currentLevel = (currentLevel + 1) % LEVELS.length;
+    if (currentLevel === LEVELS.length - 1) {
+        // Reset the loop cleanly back to level 1
+        currentLevel = 0;
+    } else {
+        currentLevel++;
+    }
     loadLevel();
 });
 
