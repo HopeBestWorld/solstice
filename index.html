@@ -16,6 +16,23 @@
             <p class="subtitle">An Ode to Alan Turing & The Shifting Light</p>
         </header>
 
+        <div class="panel instructions-panel" style="margin-bottom: 20px; border-left: 4px solid #10b981;">
+            <h3>📜 OPERATIONAL BRIEFING</h3>
+            <p>Welcome, Agent. You are operating a simulated Turing decryption machine. To crack the encrypted
+                transmissions, you must manipulate both the <strong>physical environment</strong> and the
+                <strong>mechanical rotors</strong> simultaneously:</p>
+            <ol>
+                <li><strong>Control the Solar Phase:</strong> Shine a light (like your phone's flashlight) at your
+                    webcam to activate <strong>DAY MODE</strong>, or cover your webcam with your hand to plunge it into
+                    <strong>NIGHT MODE</strong>.</li>
+                <li><strong>Decipher the Clue:</strong> Read Turing's cryptic hint to deduce the secret rotor settings.
+                </li>
+                <li><strong>Execute the Test:</strong> Match your physical environment to the rotor you are testing,
+                    dial in your guess, and click <strong>Run Decryption Test</strong>. You must find the correct
+                    pairing for both states to completely unlock the message!</li>
+            </ol>
+        </div>
+
         <div class="grid-layout">
             <div class="panel control-panel">
                 <h3>Google AI Environment Sensor</h3>
@@ -27,31 +44,29 @@
                     <p>AI State: <span id="ai-status">Initializing TensorFlow...</span></p>
                     <p>Light Value: <span id="light-metric">0.00</span></p>
                 </div>
-                <div class="instructions">
-                    <p><strong>How to Play:</strong> Shine a light at your webcam to enter <strong>DAY MODE</strong>.
-                        Cover/block the light to enter <strong>NIGHT MODE</strong>.</p>
-                </div>
             </div>
 
             <div class="panel machine-panel">
                 <h3>Turing-Enigma Decryption Matrix</h3>
-                <div class="cipher-box">
+                <div class="cipher-box" style="margin-bottom: 15px;">
                     <p><strong>Encrypted Transmission:</strong></p>
                     <div id="encrypted-text" class="binary-stream">01001000 01000101 01001100 01001100 01001111</div>
                 </div>
 
+                <div id="hint-box" class="stats" style="border-left: 4px solid var(--accent-day); margin-bottom: 15px;">
+                    <strong>Turing's Cryptic Hint:</strong> <br>
+                    <span id="current-hint" style="color: #cbd5e1; font-style: italic;">Loading cipher clues...</span>
+                </div>
+
                 <div class="rotor-container">
                     <div class="rotor-slot">
-                        <label>Rotor I (Day)</label>
+                        <label>Rotor I (Active during DAY)</label>
                         <input type="number" id="rotor-day" min="0" max="9" value="0">
                     </div>
                     <div class="rotor-slot">
-                        <label>Rotor II (Night)</label>
+                        <label>Rotor II (Active during NIGHT)</label>
                         <input type="number" id="rotor-night" min="0" max="9" value="0">
                     </div>
-                </div>
-                <div id="hint-box" class="stats" style="border-left: 3px solid var(--accent-day); margin-bottom: 15px;">
-                    <strong>Turing's Clue:</strong> <span id="current-hint">Loading cipher clues...</span>
                 </div>
 
                 <button id="decrypt-btn">RUN DECRYPTION TEST</button>

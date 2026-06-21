@@ -5,24 +5,24 @@ const LEVELS = [
         solution: "TURING",
         dayRotorKey: 3,
         nightRotorKey: 7,
-        hint: "The alignment frequency requires Rotor I to equal 3. Calibrate Rotor II to 7.",
-        clue: "Level 1 Milestone: The Father of Modern Computing & June Pride icon."
+        hint: "Rotor I (Day): The number of letters in the acronym 'PRIDE'. Minus two. \n\nRotor II (Night): The month number of the Summer Solstice (June). Plus one.",
+        clue: "Level 1 Milestone Decrypted: Alan Turing — The Father of Modern Computing & June Pride icon."
     },
     {
         encrypted: "01010011 01001111 01001100 01010011 01010100 01001001 01000011 01000101",
         solution: "SOLSTICE",
         dayRotorKey: 5,
         nightRotorKey: 2,
-        hint: "Balance the solar cycles. Set Rotor I to 5, and match Rotor II to 2.",
-        clue: "Level 2 Milestone: Shifting balancing point of June 21st."
+        hint: "Rotor I (Day): The number of sides on a standard computer chip architecture square, plus one. \n\nRotor II (Night): The number of binary states in standard computing logic (True/False).",
+        clue: "Level 2 Milestone Decrypted: Summer Solstice — The celestial alignment point of June 21st."
     },
     {
         encrypted: "01001010 01010101 01001110 01000101 01010100 01000101 01000101 01001110 01010100 01001000",
         solution: "JUNETEENTH",
         dayRotorKey: 6,
         nightRotorKey: 1,
-        hint: "The final frequency coordinates toward liberation. Set Rotor I to 6 and Rotor II to 1.",
-        clue: "Level 3 Milestone: Honoring historical freedom, resilience, and Black joy."
+        hint: "Rotor I (Day): The month number of June itself. \n\nRotor II (Night): The numeric value representing unity, liberation, and new beginnings.",
+        clue: "Level 3 Milestone Decrypted: Juneteenth — Honoring freedom, resilience, and Black joy."
     }
 ];
 
@@ -86,7 +86,6 @@ function loadLevel() {
     document.getElementById('rotor-day').value = 0;
     document.getElementById('rotor-night').value = 0;
 
-    // Change the button text based on whether it's the final level or a progression
     const nextBtn = document.getElementById('next-level-btn');
     if (currentLevel === LEVELS.length - 1) {
         nextBtn.innerText = "🔄 Play Again / Restart Matrix";
@@ -116,17 +115,16 @@ document.getElementById('decrypt-btn').addEventListener('click', () => {
     }
 
     if (userDayRotor === level.dayRotorKey && userNightRotor === level.nightRotorKey) {
-        decryptedMessage.innerHTML = `🔓 <strong>SUCCESS:</strong> "${level.solution}"<br><br><em>${level.clue}</em>`;
+        decryptedMessage.innerHTML = `🔓 <strong>SUCCESS MATRIX BREAKDOWN:</strong><br><br> "${level.solution}"<br><br><em>${level.clue}</em>`;
         document.getElementById('victory-card').classList.remove('hidden');
     } else {
-        decryptedMessage.innerHTML = "⏳ <strong>PARTIAL ALIGNMENT:</strong> Current environmental rotor matches, but the alternative solar phase rotor requires alignment.";
+        decryptedMessage.innerHTML = "⏳ <strong>PARTIAL ALIGNMENT:</strong> The rotor for your current environmental lighting state matches! However, you must now change your room lighting (switch to the opposite Solar Phase) to calibrate and verify the second rotor.";
     }
 });
 
 // Progression & Reset Handler
 document.getElementById('next-level-btn').addEventListener('click', () => {
     if (currentLevel === LEVELS.length - 1) {
-        // Reset the loop cleanly back to level 1
         currentLevel = 0;
     } else {
         currentLevel++;
