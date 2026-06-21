@@ -35,7 +35,7 @@ async function initGame() {
     aiStatus = document.getElementById('ai-status');
 
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 } });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 320 }, height: { ideal: 240 } } });
         videoElement.srcObject = stream;
         aiStatus.innerText = "TensorFlow Engine Active";
 
