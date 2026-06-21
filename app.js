@@ -30,6 +30,10 @@ let currentLevel = 0;
 let isDayMode = true;
 let videoElement, overlay, lightMetric, aiStatus;
 
+// Persistent memory calibration targets
+let dayCalibrated = false;
+let nightCalibrated = false;
+
 // Initialize Web Browser Stream and TensorFlow Engine
 async function initGame() {
     videoElement = document.getElementById('webcam');
@@ -86,6 +90,10 @@ function loadLevel() {
     document.getElementById('rotor-day').value = 0;
     document.getElementById('rotor-night').value = 0;
 
+    // Reset calibration trackers for the new level
+    dayCalibrated = false;
+    nightCalibrated = false;
+
     const nextBtn = document.getElementById('next-level-btn');
     if (currentLevel === LEVELS.length - 1) {
         nextBtn.innerText = "🔄 Play Again / Restart Matrix";
@@ -94,7 +102,7 @@ function loadLevel() {
     }
 }
 
-// Turing Decryption Algorithm
+// Patched Turing Decryption Algorithm
 document.getElementById('decrypt-btn').addEventListener('click', () => {
     const level = LEVELS[currentLevel];
     const userDayRotor = parseInt(document.getElementById('rotor-day').value);
@@ -104,21 +112,33 @@ document.getElementById('decrypt-btn').addEventListener('click', () => {
 
     outputPanel.classList.remove('hidden');
 
-    // Turing Machine Environmental Mode Constraints
-    if (isDayMode && userDayRotor !== level.dayRotorKey) {
-        decryptedMessage.innerHTML = "❌ <strong>DECRYPTION FAILED:</strong> Rotor I configuration mismatch for the active Solstice Day frequency.";
-        return;
-    }
-    if (!isDayMode && userNightRotor !== level.nightRotorKey) {
-        decryptedMessage.innerHTML = "❌ <strong>DECRYPTION FAILED:</strong> Rotor II configuration mismatch for the active Solstice Night matrix.";
-        return;
+    // 1. Evaluate current state based on physical real-world lighting
+    if (isDayMode) {
+        if (userDayRotor === level.dayRotorKey) {
+            dayCalibrated = true;
+        } else {
+            dayCalibrated = false;
+            decryptedMessage.innerHTML = "❌ <strong>DECRYPTION FAILED:</strong> Rotor I configuration mismatch for the active Solstice Day frequency.";
+            return;
+        }
+    } else {
+        if (userNightRotor === level.nightRotorKey) {
+            nightCalibrated = true;
+        } else {
+            nightCalibrated = false;
+            decryptedMessage.innerHTML = "❌ <strong>DECRYPTION FAILED:</strong> Rotor II configuration mismatch for the active Solstice Night matrix.";
+            return;
+        }
     }
 
-    if (userDayRotor === level.dayRotorKey && userNightRotor === level.nightRotorKey) {
+    // 2. Enforce absolute matrix check: both constraints must be simultaneously true
+    if (dayCalibrated && nightCalibrated) {
         decryptedMessage.innerHTML = `🔓 <strong>SUCCESS MATRIX BREAKDOWN:</strong><br><br> "${level.solution}"<br><br><em>${level.clue}</em>`;
         document.getElementById('victory-card').classList.remove('hidden');
-    } else {
-        decryptedMessage.innerHTML = "⏳ <strong>PARTIAL ALIGNMENT:</strong> The rotor for your current environmental lighting state matches! However, you must now change your room lighting (switch to the opposite Solar Phase) to calibrate and verify the second rotor.";
+    } else if (dayCalibrated && !nightCalibrated) {
+        decryptedMessage.innerHTML = "⏳ <strong>ROTOR I ALIGNED:</strong> Solstice Day parameters verified successfully! Now, change your environment to <strong>NIGHT MODE</strong> (cover your webcam) to calibrate Rotor II.";
+    } else if (!dayCalibrated && nightCalibrated) {
+        decryptedMessage.innerHTML = "⏳ <strong>ROTOR II ALIGNED:</strong> Solstice Night parameters verified successfully! Now, change your environment to <strong>DAY MODE</strong> (shine a light at your webcam) to calibrate Rotor I.";
     }
 });
 
