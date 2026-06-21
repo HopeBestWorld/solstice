@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solstice Cipher: The Turing Test of Light</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+</head>
+
+<body>
+    <div id="game-container">
+        <header>
+            <h1>SOLSTICE CIPHER</h1>
+            <p class="subtitle">An Ode to Alan Turing & The Shifting Light</p>
+        </header>
+
+        <div class="grid-layout">
+            <div class="panel control-panel">
+                <h3>Google AI Environment Sensor</h3>
+                <div class="video-wrapper">
+                    <video id="webcam" autoplay playsinline muted></video>
+                    <div id="solstice-overlay" class="day-mode">DAY</div>
+                </div>
+                <div class="stats">
+                    <p>AI State: <span id="ai-status">Initializing TensorFlow...</span></p>
+                    <p>Light Value: <span id="light-metric">0.00</span></p>
+                </div>
+                <div class="instructions">
+                    <p><strong>How to Play:</strong> Shine a light at your webcam to enter <strong>DAY MODE</strong>.
+                        Cover/block the light to enter <strong>NIGHT MODE</strong>.</p>
+                </div>
+            </div>
+
+            <div class="panel machine-panel">
+                <h3>Turing-Enigma Decryption Matrix</h3>
+                <div class="cipher-box">
+                    <p><strong>Encrypted Transmission:</strong></p>
+                    <div id="encrypted-text" class="binary-stream">01001000 01000101 01001100 01001100 01001111</div>
+                </div>
+
+                <div class="rotor-container">
+                    <div class="rotor-slot">
+                        <label>Rotor I (Day)</label>
+                        <input type="number" id="rotor-day" min="0" max="9" value="0">
+                    </div>
+                    <div class="rotor-slot">
+                        <label>Rotor II (Night)</label>
+                        <input type="number" id="rotor-night" min="0" max="9" value="0">
+                    </div>
+                </div>
+
+                <button id="decrypt-btn">RUN DECRYPTION TEST</button>
+
+                <div id="output-panel" class="output-box hidden">
+                    <h4>Decryption Output:</h4>
+                    <p id="decrypted-message">---</p>
+                    <div id="victory-card" class="hidden">
+                        <p>🎉 <strong>Cipher Solved!</strong> You unlocked a historical June celebration milestone.</p>
+                        <button id="next-level-btn">Load Next Transmission</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
